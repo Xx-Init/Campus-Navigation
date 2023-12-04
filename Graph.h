@@ -40,7 +40,7 @@ public:
 
     void del_edge(int, int); // delete_edge
 
-    void del_place(int); // delete place
+    void del_place(int); // delete_place
 
     void print();  // print current place and road information
 };

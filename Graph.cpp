@@ -27,8 +27,12 @@ void Graph:: option(){
         print();
         break;
     case 2:
-        cout<< "Please select the desired insert action\n1: place     2: road\n";
-        cin>> op2;
+        cout<< "Please select the desired insert action.\n1: place     2: road\n";
+        while(cin>> op2){
+            if(op2 != "place" && op2 != "road") 
+                cout<< "Unknown action! Please select the desired delete action.\n1: place     2: road\n";
+            else break;
+        };
         if(op2 == "place"){
             cout<< "Please input place\n";
             cin>> place1;
@@ -38,7 +42,11 @@ void Graph:: option(){
                 nodeSz ++;
                 cout<< "Insert place successully!\n";
             }else{
-                cout<< "The place has existed!\n";
+                if(!V[u].existed){
+                    V[u].existed = true;
+                    cout<< "Insert place successully!\n";
+                }else
+                    cout<< "The place has existed!\n";
             }
         }else{
             cout<< "Please input place1, place2 and distance\n";
@@ -49,12 +57,23 @@ void Graph:: option(){
             if(v == V.size()){ V.push_back(Node1{place2, true}); nodeSz ++;}
             ins_edge(u, v, w);
         }
+        print();
         break;
     case 3:
-        cout<< "Please select the desired delete action\n1: place     2: road\n";
-        cin>> op2;
+        cout<< "Please select the desired delete action.\n1: place     2: road\n";
+        while(cin>> op2){
+            if(op2 != "place" && op2 != "road") 
+                cout<< "Unknown action! Please select the desired delete action.\n1: place     2: road\n";
+            else break;
+        };
         if(op2 == "place"){
             cout<< "Please input place\n";
+            cin>> place1;
+            u = find(V.begin(), V.end(), place1)-V.begin();
+            if(u != V.size())
+                del_place(u);
+            else
+                cout<< "The place does not exist!\n";
         }else{
             cout<< "Please input place1, place2\n";
             cin>> place1>> place2;
@@ -64,6 +83,7 @@ void Graph:: option(){
             if(v == V.size()) V.push_back(Node1{place2, true});
             del_edge(u, v);
         }
+        print();
         break;
     case 4:
         cout<< "Exit successfully!\n";
@@ -81,10 +101,14 @@ void Graph:: ins_edge(int u, int v, int w){
         if(to == v){
             if(e1[i].dis == inf){
                 e1[i].dis = w;
+                if(i&1) e1[i+1].dis = w;
+                else e1[i-1].dis = w;
                 cout<< "Insert successfully!\n";
             }else{
                 cout<< "The edge has existed, modify successfully!\n";
                 e1[i].dis = w;
+                if(i&1) e1[i+1].dis = w;
+                else e1[i-1].dis = w;
             }
             found = true;
             break;
@@ -102,34 +126,40 @@ void Graph:: ins_edge(int u, int v, int w){
         e1[tot].dis = w;
         head[v] = tot;
     }
-    print();
 }
 
 void Graph::del_edge(int u, int v){
     if(!head[u] || !head[v]) cout<< "The edge connecting "<< V[u].name<< " and "<< V[v].name<< " does not exist!\n ";
     else{
-        bool exist = true;
-        for(int i = head[u]; i && exist; i = e1[i].nxt){
+        for(int i = head[u]; i ; i = e1[i].nxt){
             int to = e1[i].to;
             if(to == v){
                 if(e1[i].dis == inf)
                     cout<< "The edge connecting "<< V[u].name<< " and "<< V[v].name<< " has been deleted!\n ";
-                else
-                    e1[i].dis = inf, cout<< "Delete successfully!\n";
-                exist = false;
-                break;
-            }
-        }
-        for(int i = head[v]; i && exist; i = e1[i].nxt){
-            int to = e1[i].to;
-            if(to == u){
-                e1[i].dis = inf;
+                else{
+                    e1[i].dis = inf;
+                    if(i&1) e1[i+1].dis = inf;
+                    else e1[i-1].dis = inf;
+                    cout<< "Delete successfully!\n";
+                }
                 break;
             }
         }
     }
+}
 
-    print(); 
+void Graph:: del_place(int u){
+    V[u].existed = false;
+    for(int i = head[u]; i; i = e1[i].nxt){
+        int v = e1[i].to;
+        if(e1[i].dis == inf) continue;
+        else{
+            e1[i].dis = inf;
+            if(i&1) e1[i+1].dis = inf;
+            else e1[i-1].dis = inf;
+        }
+    }
+    cout<< "Delete place successfully!\n";
 }
 
 void Graph:: dfs(int u, int fa){
@@ -145,9 +175,10 @@ void Graph:: dfs(int u, int fa){
 
 void Graph:: print(){   
     cout<< "Below is the current place information!\n";
-    for(int i = 1; i <= nodeSz; i ++){
-        cout<< V[i].name<< ' ';
-    }
+    int existCitiesNum = 0;
+    for(int i = 1; i <= nodeSz; i ++)
+        if(V[i].existed) cout<< V[i].name<< ' ', existCitiesNum ++;
+    if(!existCitiesNum) cout<< "No location information!\n";
     cout<< "\nBelow is the current place information!\n";
     vis = new int[nodeSz+1];
     fill(vis, vis+nodeSz+1, 0);
