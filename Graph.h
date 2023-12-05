@@ -9,9 +9,11 @@ const int maxSize = 2e4+2;
 
 class Graph{
 private:
-    int head[maxSize], tot;
-    int *vis;  // dfs records whether a location has been visited while traversing
-    
+    int head[maxSize], tot; // use adjacency lists to store graphs
+    int *vis, *pre, *dis;  
+    // vis: dfs records whether a location has been visited while traversing
+    // pre: used to output the shortest path
+    // dis: used to output the shortest distance
     struct Node1{
         string name;
         bool existed;
@@ -29,7 +31,18 @@ private:
     
     unordered_map<string, int> options;
     
-    void dfs(int, int);
+    void dfs(int, int); // dfs traverses the graph
+
+    void dijkstra(int); // dijkstra algorithm is used to calculate the shortest path
+
+    void showPath(int); // show path
+
+    struct Node2{ // used for dijkstra algorithm
+        int dis, v;
+        bool operator > (const Node2& o) const{
+            return dis > o.dis;
+        }
+    }; 
 
 public:
     Graph();
@@ -42,6 +55,8 @@ public:
 
     void del_place(int); // delete_place
 
+    void getShortestPath(int, int); // compute the shortestpath
+    
     void print();  // print current place and road information
 };
 

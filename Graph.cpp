@@ -10,17 +10,19 @@ Graph:: Graph(){
     options[string("print")] = 1;
     options[string("insert")] = 2;
     options[string("delete")] = 3;
-    options[string("exit")] = 4;
+    options[string("compute")] = 4;
+    options[string("exit")] = 5;
 }
 
-void Graph:: option(){
+void Graph:: option(){ // select options and implement the transformation of input information
     string op1, op2;
     int u, v, w;
     string place1, place2;
-    cout<< "Please select action:\n1 print: output place and road information\n";
-    cout<< "2 insert: insert place/road information\n";
-    cout<< "3 delete: delete place/road information\n";
-    cout<< "4 exit: log out\n";
+    cout<< "Please select action:\n1 print: output place and road information.\n";
+    cout<< "2 insert: insert place/road information.\n";
+    cout<< "3 delete: delete place/road information.\n";
+    cout<< "4 compute: compute some information.\n";
+    cout<< "5 exit: log out.\n";
     cin>> op1;
     switch (options[op1]){
     case 1:
@@ -85,7 +87,27 @@ void Graph:: option(){
         }
         print();
         break;
-    case 4:
+    case 4: 
+        cout<< "Please select the desired compute action.(Enter an option, such as 1)\n";
+        cout<< "1: get shortest path between two places\n";
+        cout<< "2: road\n";
+        cin>> op2;
+        if(op2 == "1"){
+            cout<< "Please input place1 and place2.\n";
+            cin>> place1>> place2;
+            u = find(V.begin(), V.end(), place1)-V.begin();
+            v = find(V.begin(), V.end(), place2)-V.begin();
+            if(u == V.size() || ! V[u].existed){
+                cout<< place1<<" does not existed!\n";
+                break;
+            }else if(v == V.size() || ! V[v].existed){
+                cout<< place2<<" does not existed!\n";
+                break;
+            }
+            getShortestPath(u, v);
+        }
+        break;
+    case 5:
         cout<< "Exit successfully!\n";
         exit(0);
     default:
@@ -171,6 +193,55 @@ void Graph:: dfs(int u, int fa){
         cout<< V[u].name<< ' '<< V[e1[i].to].name<< ' '<< e1[i].dis<< endl;
         dfs(v, u);
     }
+}
+
+void Graph:: showPath(int now){
+    if(pre[now] == -1){
+        cout<< V[now].name<< ' ';
+        return;
+    }
+    showPath(pre[now]);
+    cout<< V[now].name<< ' ';
+}
+
+void Graph:: dijkstra(int s){
+    priority_queue<Node2, vector<Node2>, greater<Node2>> q;
+    q.push({0, s});
+    while(!q.empty()){
+        int u = q.top().v;
+        q.pop();
+        if(vis[u]) continue;
+        vis[u] = 1;
+        for(int i = head[u]; i; i = e1[i].nxt){
+            int v = e1[i].to, w = e1[i].dis;
+            if(dis[v] > dis[u]+w){
+                dis[v] = dis[u]+w;
+                pre[v] = u;
+                q.push({dis[v], v});
+            }
+        }
+    }
+}
+
+void Graph:: getShortestPath(int u, int v){
+    pre = new int[nodeSz+1];
+    dis = new int[nodeSz+1];
+    vis = new int[nodeSz+1];
+    fill(vis, vis+nodeSz+1, 0);
+    fill(dis, dis+nodeSz+1, inf);
+    fill(pre, pre+nodeSz+1, 0);
+    pre[u] = -1;
+    dis[u] = 0;
+    dijkstra(u);
+    if(dis[v] == inf) 
+        cout<< "There is no path from "<< V[u].name<< " to "<< V[v].name<< "!\n";
+    else{
+        cout<< "The shortest path length is "<< dis[v]<< endl;
+        showPath(v);
+        cout<< endl;
+    }
+    delete pre;
+    delete dis;
 }
 
 void Graph:: print(){   
