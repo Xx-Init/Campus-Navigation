@@ -44,9 +44,12 @@ private:
         }
     }; 
 
+
 public:
     Graph();
 
+    void importFile(); // import initial file
+    
     void option();
 
     void ins_edge(int, int, int); // insert_edge

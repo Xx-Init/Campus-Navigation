@@ -12,6 +12,24 @@ Graph:: Graph(){
     options[string("delete")] = 3;
     options[string("compute")] = 4;
     options[string("exit")] = 5;
+    //importFile();
+}
+
+void Graph:: importFile(){
+    ifstream ifs;
+    ifs.open("map.csv", ios:: in);
+    string place1, place2;
+    int dis;
+    while(ifs>> place1>> place2>> dis){
+        cout<< place1<< ' '<< place2<< ' '<< dis<< endl;
+        int u = find(V.begin(), V.end(), place1)-V.begin();
+        if(u == V.size()) V.push_back(Node1{place1, true});
+        int v = find(V.begin(), V.end(), place2)-V.begin();
+        if(v == V.size()) V.push_back(Node1{place2, true});
+        ins_edge(u, v, dis);
+    }
+    cout<< "Initialize successfully!\n";
+    ifs.close();
 }
 
 void Graph:: option(){ // select options and implement the transformation of input information
@@ -250,7 +268,7 @@ void Graph:: print(){
     for(int i = 1; i <= nodeSz; i ++)
         if(V[i].existed) cout<< V[i].name<< ' ', existCitiesNum ++;
     if(!existCitiesNum) cout<< "No location information!\n";
-    cout<< "\nBelow is the current place information!\n";
+    cout<< "\nBelow is the current road information!\n";
     vis = new int[nodeSz+1];
     fill(vis, vis+nodeSz+1, 0);
     for(int i = 1; i <= nodeSz; i ++)   
