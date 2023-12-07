@@ -61,6 +61,8 @@ public:
     void getShortestPath(int, int); // compute the shortestpath
     
     void print();  // print current place and road information
+
+    void printPlaces();// print current place information
 };
 
 #endif

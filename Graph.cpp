@@ -12,7 +12,7 @@ Graph:: Graph(){
     options[string("delete")] = 3;
     options[string("compute")] = 4;
     options[string("exit")] = 5;
-    //importFile();
+    importFile();
 }
 
 void Graph:: importFile(){
@@ -23,9 +23,9 @@ void Graph:: importFile(){
     while(ifs>> place1>> place2>> dis){
         cout<< place1<< ' '<< place2<< ' '<< dis<< endl;
         int u = find(V.begin(), V.end(), place1)-V.begin();
-        if(u == V.size()) V.push_back(Node1{place1, true});
+        if(u == V.size()) V.push_back(Node1{place1, true}), nodeSz ++;
         int v = find(V.begin(), V.end(), place2)-V.begin();
-        if(v == V.size()) V.push_back(Node1{place2, true});
+        if(v == V.size()) V.push_back(Node1{place2, true}), nodeSz ++;
         ins_edge(u, v, dis);
     }
     cout<< "Initialize successfully!\n";
@@ -33,6 +33,7 @@ void Graph:: importFile(){
 }
 
 void Graph:: option(){ // select options and implement the transformation of input information
+    printPlaces();
     string op1, op2;
     int u, v, w;
     string place1, place2;
@@ -215,11 +216,11 @@ void Graph:: dfs(int u, int fa){
 
 void Graph:: showPath(int now){
     if(pre[now] == -1){
-        cout<< V[now].name<< ' ';
+        cout<< V[now].name;
         return;
     }
     showPath(pre[now]);
-    cout<< V[now].name<< ' ';
+    cout<< "->"<<V[now].name;
 }
 
 void Graph:: dijkstra(int s){
@@ -263,17 +264,23 @@ void Graph:: getShortestPath(int u, int v){
 }
 
 void Graph:: print(){   
-    cout<< "Below is the current place information!\n";
-    int existCitiesNum = 0;
-    for(int i = 1; i <= nodeSz; i ++)
-        if(V[i].existed) cout<< V[i].name<< ' ', existCitiesNum ++;
-    if(!existCitiesNum) cout<< "No location information!\n";
-    cout<< "\nBelow is the current road information!\n";
+    printPlaces();
+    cout<< "Below is the current road information!\n";
     vis = new int[nodeSz+1];
     fill(vis, vis+nodeSz+1, 0);
     for(int i = 1; i <= nodeSz; i ++)   
         if(!vis[i])
             dfs(i, 0);
     cout<< "Finish!\n";
+    cout<< nodeSz<< endl;
     delete vis;
+}
+
+void Graph:: printPlaces(){
+    cout<< "Below is the current place information!\n";
+    int existCitiesNum = 0;
+    for(int i = 1; i <= nodeSz; i ++)
+        if(V[i].existed) cout<< V[i].name<< ' ', existCitiesNum ++;
+    if(!existCitiesNum) cout<< "No location information!\n";
+    else cout<< endl;
 }
