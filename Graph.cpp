@@ -1,8 +1,6 @@
 #include "head.h"
 #include "Graph.h"
 
-using namespace std;
-
 Graph:: Graph(){
     tot = 0; nodeSz = 0;
     memset(head, 0, sizeof(head));

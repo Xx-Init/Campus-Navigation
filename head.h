@@ -14,4 +14,5 @@
 using ll = long long;
 const int inf = 1e9+9;
 
+using namespace std;
 #endif

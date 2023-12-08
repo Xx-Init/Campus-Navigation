@@ -3,8 +3,6 @@
 
 #include "head.h"
 
-using namespace std;
-
 const int maxSize = 2e4+2;
 
 class Graph{
