@@ -33,6 +33,7 @@ void Graph:: importFile(){
 void Graph:: option(){ // select options and implement the transformation of input information
     printPlaces();
     string op1, op2;
+    int op3;
     int u, v, w;
     string place1, place2;
     cout<< "Please select action:\n1 print: output place and road information.\n";
@@ -106,10 +107,16 @@ void Graph:: option(){ // select options and implement the transformation of inp
         break;
     case 4: 
         cout<< "Please select the desired compute action.(Enter an option, such as 1)\n";
-        cout<< "1: get shortest path between two places\n";
-        cout<< "2: road\n";
-        cin>> op2;
-        if(op2 == "1"){
+        cout<< "1: get the shortest path between two places\n";
+        cout<< "2: get the shortest path through a fixed number of locations\n";
+        cout<< "3: get the shortest path through a fixed number of locations\n";
+        cout<< "4: get the shortest path through a fixed number of locations\n";
+        while(cin>> op3){
+            if(op3 < 1 || op3 > 4) cout<< "Unknown action! Please try again!\n";
+            else break;
+        }
+        switch (op3){
+        case 1:
             cout<< "Please input place1 and place2.\n";
             cin>> place1>> place2;
             u = find(V.begin(), V.end(), place1)-V.begin();
@@ -122,6 +129,13 @@ void Graph:: option(){ // select options and implement the transformation of inp
                 break;
             }
             getShortestPath(u, v);
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
         }
         break;
     case 5:
