@@ -31,10 +31,12 @@ void Graph:: importFile(){
 }
 
 void Graph:: option(){ // select options and implement the transformation of input information
-    printPlaces();
     string op1, op2;
+    cout<< "Press any key to continue!\n";
+    cin>> op1;
+    print();
     int op3;
-    int u, v, w;
+    int u, v, w, numOfPlaces;
     string place1, place2;
     cout<< "Please select action:\n1 print: output place and road information.\n";
     cout<< "2 insert: insert place/road information.\n";
@@ -131,6 +133,18 @@ void Graph:: option(){ // select options and implement the transformation of inp
             getShortestPath(u, v);
             break;
         case 2:
+            cout<< "Please input place1, place2 and place numbers.\n";
+            cin>> place1>> place2>> numOfPlaces;
+            u = find(V.begin(), V.end(), place1)-V.begin();
+            v = find(V.begin(), V.end(), place2)-V.begin();
+            if(u == V.size() || ! V[u].existed){
+                cout<< place1<<" does not existed!\n";
+                break;
+            }else if(v == V.size() || ! V[v].existed){
+                cout<< place2<<" does not existed!\n";
+                break;
+            }
+            findPathThroNumPlaces(u, v, numOfPlaces);
             break;
         case 3:
             break;
@@ -226,13 +240,14 @@ void Graph:: dfs(int u, int fa){
     }
 }
 
-void Graph:: showPath(int now){
-    if(pre[now] == -1){
-        cout<< V[now].name;
-        return;
+vector<int> Graph:: getPath(int now){
+    vector<int> path;
+    while(pre[now] != -1){
+        path.push_back(now);
+        now = pre[now];
     }
-    showPath(pre[now]);
-    cout<< "->"<<V[now].name;
+    path.push_back(now);
+    return path;
 }
 
 void Graph:: dijkstra(int s){
@@ -268,11 +283,16 @@ void Graph:: getShortestPath(int u, int v){
         cout<< "There is no path from "<< V[u].name<< " to "<< V[v].name<< "!\n";
     else{
         cout<< "The shortest path length is "<< dis[v]<< endl;
-        showPath(v);
-        cout<< endl;
+        vector<int> path = getPath(v);
+        int sz = path.size();
+        for(int i = sz-1; i > 0; i --){
+            cout<<V[path[i]].name<< "->";
+        }
+        cout<< V[path[0]].name<< endl;
     }
     delete pre;
     delete dis;
+    delete vis;
 }
 
 void Graph:: print(){   
@@ -284,7 +304,49 @@ void Graph:: print(){
         if(!vis[i])
             dfs(i, 0);
     cout<< "Finish!\n";
-    cout<< nodeSz<< endl;
+    cout<< "There are "<<nodeSz<< " places!"<< endl;
+    delete vis;
+}
+
+void Graph:: dfsToFind(int tar, int now, int fa, int num, int numOfPlaces, int dis, int &ans, vector<int>& path){
+    if(num == numOfPlaces){
+        if(dis < ans && now == tar){
+            ans = dis;
+            path = getPath(now);
+        }
+        return;
+    }
+    vis[now] = 1;
+    for(int i = head[now]; i; i = e1[i].nxt){
+        int to = e1[i].to;
+        if(vis[to]) continue;
+        pre[to] = now;
+        dfsToFind(tar, to, now, num+1, numOfPlaces, dis+e1[i].dis, ans, path);
+    }
+    vis[now] = 0;
+}
+
+void Graph:: findPathThroNumPlaces(int u, int v, int num){
+    int ans = inf;
+    vector<int> path;
+    pre = new int[nodeSz+1];
+    vis = new int[nodeSz+1];
+    fill(vis, vis+nodeSz+1, 0);
+    fill(pre, pre+nodeSz+1, 0);
+    pre[u] = -1;
+    dfsToFind(v, u, 0, 1, num, 0, ans, path);
+    if(path.size()){
+        cout<< "The distance of shortest path through "<< num<< " places from "<< V[u].name<< " to "<< V[v].name<< " is "<< ans<< endl;
+        cout<< "Below is the shortest path:\n";
+        int sz = path.size();
+        for(int i = sz-1; i > 0; i --){
+            cout<<V[path[i]].name<< "->";
+        }
+        cout<< V[path[0]].name<< endl;
+    }else{
+        cout<< "The shortest path through "<< num<< " places from "<< V[u].name<< " to "<< V[v].name<< " does not exist!\n";
+    }
+    delete pre;
     delete vis;
 }
 

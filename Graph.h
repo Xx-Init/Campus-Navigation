@@ -33,7 +33,7 @@ private:
 
     void dijkstra(int); // dijkstra algorithm is used to calculate the shortest path
 
-    void showPath(int); // show path
+    vector<int> getPath(int); // get path
 
     struct Node2{ // used for dijkstra algorithm
         int dis, v;
@@ -42,6 +42,7 @@ private:
         }
     }; 
 
+    void dfsToFind(int, int, int, int, int, int, int&, vector<int>&);
 
 public:
     Graph();
@@ -58,9 +59,11 @@ public:
 
     void getShortestPath(int, int); // compute the shortestpath
     
-    void print();  // print current place and road information
+    void print(); // print current place and road information
 
-    void printPlaces();// print current place information
+    void findPathThroNumPlaces(int, int, int); // The shortest path through n locations
+
+    void printPlaces(); // print current place information
 };
 
 #endif
