@@ -33,7 +33,7 @@ void Graph:: importFile(){
 void Graph:: option(){ // select options and implement the transformation of input information
     string op1, op2;
     cout<< "Press any key to continue!\n";
-    cin>> op1;
+    char c = getchar();
     print();
     int op3;
     int u, v, w, numOfPlaces;
