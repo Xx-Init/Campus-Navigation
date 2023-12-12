@@ -3,8 +3,6 @@
 
 #include "head.h"
 
-const int maxSize = 2e4+2;
-
 class Graph{
 private:
     int head[maxSize], tot; // use adjacency lists to store graphs
@@ -29,7 +27,7 @@ private:
     
     unordered_map<string, int> options;
     
-    void dfs(int, int); // dfs traverses the graph
+    void dfs1(int, int); // dfs traverses the graph
 
     void dijkstra(int); // dijkstra algorithm is used to calculate the shortest path
 
@@ -43,6 +41,10 @@ private:
     }; 
 
     void dfsToFind(int, int, int, int, int, int, int&, vector<int>&);
+
+    bool inConnectedGraph(vector<int>&); // judge whether all places are in a connected graph
+
+    void dfs2(int); // determine connectivity
 
 public:
     Graph();
@@ -64,6 +66,8 @@ public:
     void findPathThroNumPlaces(int, int, int); // The shortest path through n locations
 
     void printPlaces(); // print current place information
+
+    void buildMST(int); // build minimum spanning tree
 };
 
 #endif

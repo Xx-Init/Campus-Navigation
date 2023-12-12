@@ -1,5 +1,6 @@
 #include "head.h"
 #include "Graph.h"
+#include "MST.h"
 
 Graph:: Graph(){
     tot = 0; nodeSz = 0;
@@ -34,10 +35,13 @@ void Graph:: option(){ // select options and implement the transformation of inp
     string op1, op2;
     cout<< "Press any key to continue!\n";
     char c = getchar();
+    c = getchar();
     print();
     int op3;
     int u, v, w, numOfPlaces;
+    bool flag;
     string place1, place2;
+    vector<int> placesID;
     cout<< "Please select action:\n1 print: output place and road information.\n";
     cout<< "2 insert: insert place/road information.\n";
     cout<< "3 delete: delete place/road information.\n";
@@ -111,7 +115,7 @@ void Graph:: option(){ // select options and implement the transformation of inp
         cout<< "Please select the desired compute action.(Enter an option, such as 1)\n";
         cout<< "1: get the shortest path between two places\n";
         cout<< "2: get the shortest path through a fixed number of locations\n";
-        cout<< "3: get the shortest path through a fixed number of locations\n";
+        cout<< "3: get path from a minimum spanning tree\n";
         cout<< "4: get the shortest path through a fixed number of locations\n";
         while(cin>> op3){
             if(op3 < 1 || op3 > 4) cout<< "Unknown action! Please try again!\n";
@@ -147,6 +151,22 @@ void Graph:: option(){ // select options and implement the transformation of inp
             findPathThroNumPlaces(u, v, numOfPlaces);
             break;
         case 3:
+            cout<< "Please enter the required number of locations!\n";
+            cin>> numOfPlaces;
+            placesID.clear();
+            flag = true;
+            for(int i = 0; i < numOfPlaces; i ++){
+                cin>> place1; 
+                u = find(V.begin(), V.end(), place1)-V.begin();
+                if(u == V.size()){
+                    flag = false;
+                    break;
+                }
+                placesID.push_back(u);
+            }
+            if(inConnectedGraph(placesID) && flag){
+                buildMST(placesID[0]);
+            }else cout<< "There are places that cannot be reached (or do not exist)!\n";
             break;
         case 4:
             break;
@@ -229,14 +249,14 @@ void Graph:: del_place(int u){
     cout<< "Delete place successfully!\n";
 }
 
-void Graph:: dfs(int u, int fa){
+void Graph:: dfs1(int u, int fa){
     vis[u] = 1;
     for(int i = head[u]; i; i = e1[i].nxt){
         int v = e1[i].to;
         if(v == fa || vis[v]) continue;
         if(e1[i].dis == inf) continue;
         cout<< V[u].name<< ' '<< V[e1[i].to].name<< ' '<< e1[i].dis<< endl;
-        dfs(v, u);
+        dfs1(v, u);
     }
 }
 
@@ -302,7 +322,7 @@ void Graph:: print(){
     fill(vis, vis+nodeSz+1, 0);
     for(int i = 1; i <= nodeSz; i ++)   
         if(!vis[i])
-            dfs(i, 0);
+            dfs1(i, 0);
     cout<< "Finish!\n";
     cout<< "There are "<<nodeSz<< " places!"<< endl;
     delete vis;
@@ -357,4 +377,48 @@ void Graph:: printPlaces(){
         if(V[i].existed) cout<< V[i].name<< ' ', existCitiesNum ++;
     if(!existCitiesNum) cout<< "No location information!\n";
     else cout<< endl;
+}
+
+void Graph:: dfs2(int u){
+    vis[u] = 1;
+    for(int i = head[u]; i; i = e1[i].nxt){
+        int v = e1[i].to;
+        if(vis[v] || e1[i].dis == inf) continue;
+        dfs2(v);
+    }
+}
+
+bool Graph:: inConnectedGraph(vector<int>& placesID){
+    vis = new int[nodeSz+1];
+    fill(vis, vis+nodeSz+1, 0);
+    int root = placesID[0];
+    dfs2(root);
+    bool isConnected = true;
+    for(auto i: placesID){
+        if(!vis[i]){isConnected = false; break;}
+    }
+    delete vis;
+    return isConnected;
+}
+
+void Graph:: buildMST(int s){
+    MST T{tot}; 
+    queue<int> q;
+    set<int> st1, st2;
+    q.push(s);
+    while(!q.empty()){
+        int u = q.front(); q.pop();
+        st1.insert(u);
+        st2.insert(u);
+        for(int i = head[u]; i; i = e1[i].nxt){
+            int v = e1[i].to, w = e1[i].dis;
+            if(w == inf) continue;
+            if(st1.find(v) == st1.end()){
+                T.insert(u, v, w);
+                if(st2.find(v) == st2.end()) q.push(v);
+                st2.insert(v);
+            }
+        }
+    }
+    T.kruskal();
 }
