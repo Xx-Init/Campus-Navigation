@@ -67,7 +67,8 @@ public:
 
     void printPlaces(); // print current place information
 
-    void buildMST(int); // build minimum spanning tree
+    void buildMST(vector<int>&); // build minimum spanning tree
 };
+
 
 #endif

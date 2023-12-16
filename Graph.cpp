@@ -165,7 +165,7 @@ void Graph:: option(){ // select options and implement the transformation of inp
                 placesID.push_back(u);
             }
             if(inConnectedGraph(placesID) && flag){
-                buildMST(placesID[0]);
+                buildMST(placesID);
             }else cout<< "There are places that cannot be reached (or do not exist)!\n";
             break;
         case 4:
@@ -401,11 +401,13 @@ bool Graph:: inConnectedGraph(vector<int>& placesID){
     return isConnected;
 }
 
-void Graph:: buildMST(int s){
+void Graph:: buildMST(vector<int>& places){
     MST T{tot}; 
     queue<int> q;
     set<int> st1, st2;
-    q.push(s);
+    vector<int> path;
+    // put the required edge into MTS->e1
+    q.push(places[0]);
     while(!q.empty()){
         int u = q.front(); q.pop();
         st1.insert(u);
@@ -420,5 +422,13 @@ void Graph:: buildMST(int s){
             }
         }
     }
-    T.kruskal();
+    
+    T.kruskal(); // build MST
+    T.flody(); // calculate the shortest circuit of all sources
+    places = T.findOptOrder(places);
+    path = T.getPath(places);
+    cout<< "On the minimum spanning tree, the length of the shortest path through the "<< places.size()<<" desired locations is "<< T.minDis<< endl;
+    cout<< "Here is the shortest path:\n"<< V[path[0]].name;
+    for(int i = 1; i < path.size(); i ++) cout<< "->"<< V[path[i]].name;
+    cout<< endl;
 }
