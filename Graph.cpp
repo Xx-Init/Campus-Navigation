@@ -38,7 +38,7 @@ void Graph:: option(){ // select options and implement the transformation of inp
     c = getchar();
     print();
     int op3;
-    int u, v, w, numOfPlaces;
+    int u, v, w, numOfPlaces, numOfConstraint;
     bool flag;
     string place1, place2;
     vector<int> placesID;
@@ -116,7 +116,7 @@ void Graph:: option(){ // select options and implement the transformation of inp
         cout<< "1: get the shortest path between two places\n";
         cout<< "2: get the shortest path through a fixed number of locations\n";
         cout<< "3: get path from a minimum spanning tree\n";
-        cout<< "4: get the shortest path through a fixed number of locations\n";
+        cout<< "4: find topologically constrained shortest paths\n";
         while(cin>> op3){
             if(op3 < 1 || op3 > 4) cout<< "Unknown action! Please try again!\n";
             else break;
@@ -153,6 +153,7 @@ void Graph:: option(){ // select options and implement the transformation of inp
         case 3:
             cout<< "Please enter the required number of locations!\n";
             cin>> numOfPlaces;
+            cout<< "Please enter the locations!\n";
             placesID.clear();
             flag = true;
             for(int i = 0; i < numOfPlaces; i ++){
@@ -169,6 +170,26 @@ void Graph:: option(){ // select options and implement the transformation of inp
             }else cout<< "There are places that cannot be reached (or do not exist)!\n";
             break;
         case 4:
+            cout<< "Please enter the required number of locations!\n";
+            cin>> numOfPlaces;
+            cout<< "Please enter the locations!\n";
+            placesID.clear();
+            flag = true;
+            for(int i = 0; i < numOfPlaces; i ++){
+                cin>> place1; 
+                u = find(V.begin(), V.end(), place1)-V.begin();
+                if(u == V.size()){
+                    flag = false;
+                    break;
+                }
+                placesID.push_back(u);
+            }
+            if(!(inConnectedGraph(placesID) && flag)){
+                cout<< "There are places that cannot be reached (or do not exist)!\n";
+                break;
+            }
+            cout<< "Please enter the number of constraint!\n";
+            cin>> numOfConstraint;
             break;
         }
         break;
@@ -324,7 +345,6 @@ void Graph:: print(){
         if(!vis[i])
             dfs1(i, 0);
     cout<< "Finish!\n";
-    cout<< "There are "<<nodeSz<< " places!"<< endl;
     delete vis;
 }
 
@@ -376,7 +396,7 @@ void Graph:: printPlaces(){
     for(int i = 1; i <= nodeSz; i ++)
         if(V[i].existed) cout<< V[i].name<< ' ', existCitiesNum ++;
     if(!existCitiesNum) cout<< "No location information!\n";
-    else cout<< endl;
+    else cout<< "\nThere are "<<existCitiesNum<< " places!"<< endl;
 }
 
 void Graph:: dfs2(int u){
@@ -422,7 +442,6 @@ void Graph:: buildMST(vector<int>& places){
             }
         }
     }
-    
     T.kruskal(); // build MST
     T.flody(); // calculate the shortest circuit of all sources
     places = T.findOptOrder(places);
