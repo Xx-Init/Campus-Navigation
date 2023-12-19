@@ -8,8 +8,8 @@ MST:: MST(int num){
     fill(head, head+num+3, 0);
     numOfEdge = numOfPlace = 0;
     tot = 0;
-    e1 = new Edge1 [num+3];
-    e2 = new Edge2 [num+3];
+    e1 = new Edge1 [num+3]; // the original graph
+    e2 = new Edge2 [num+3]; // the minimum spainning tree
     dis = new int*[totNum+2];
     for(int i = 0; i < totNum+2; i ++){
         dis[i] = new int [totNum+2];
@@ -25,7 +25,7 @@ MST:: ~MST(){
     places.clear();
 }
 
-void MST:: insert(int u, int v, int w){
+void MST:: insert(int u, int v, int w){ 
     if(!places.count(u)) numOfPlace ++, places.insert(u);
     if(!places.count(v)) numOfPlace ++, places.insert(v);
     e1[numOfEdge].u = u;
@@ -48,23 +48,23 @@ void MST:: add(int u, int v, int w){
 void MST:: kruskal(){
     // store distance for flody
     UF uf{numOfEdge+10};
-    sort(e1, e1+numOfEdge); //将边的权值排序(升序为最小生成树)
+    sort(e1, e1+numOfEdge); // sort edge weights (ascending to minimum spanning tree)
     int cnt = 0;
     for(int i = 0 ; i < numOfEdge; i ++){
         int tmp_u = uf.find(e1[i].u), tmp_v = uf.find(e1[i].v);
-        if(tmp_u == tmp_v){ //若出现两个点已经联通了，则说明这一条边不需要了
+        if(tmp_u == tmp_v){ // if two points are connected, then the edge is not needed
             continue;
         }
         uf.merge(tmp_u, tmp_v);
         add(e1[i].u, e1[i].v, e1[i].w);
         dis[e1[i].u][e1[i].v] = dis[e1[i].v][e1[i].u] = e1[i].w;
-        if(++ cnt == numOfPlace-1){  //循环结束条件，及边数为点数减一时
+        if(++ cnt == numOfPlace-1){  // the end condition of the loop--the number of edges is the points minus one
             break;
         }
     }
 }
 
-void MST:: flody(){
+void MST:: flody(){// using flody to calculate the shortest circuit of all sources
     for (int k = 1; k <= totNum; k++) {
         for (int i = 1; i <= totNum; i++) {
             for (int j = 1; j <= totNum; j++) {
@@ -76,7 +76,7 @@ void MST:: flody(){
     }
 }
 
-vector<int> MST:: findOptOrder(vector<int>& places){ 
+vector<int> MST:: findOptOrder(vector<int>& places){ // dfs to find the order with the shortest path length
     vector<int> optOrder;
     do{  // traverses all access orders for fixed nodes
         int tmp = 0;
@@ -86,18 +86,18 @@ vector<int> MST:: findOptOrder(vector<int>& places){
             minDis = tmp;
             optOrder = places;
         }
-    }while(next_permutation(places.begin(), places.end()));
+    }while(next_permutation(places.begin(), places.end())); 
     return optOrder;
 }
 
-void MST:: dfs_UtoTar(int u, int fa, int tar, vector<int>& path){
+void MST:: dfs_UtoTar(int u, int fa, int tar, vector<int>& path){ // dfs to find the only path from u to tar
     path.push_back(u);
     if(u == tar) return;
     for(int i = head[u]; i; i = e2[i].nxt){
         int v = e2[i].to;
         if(v == fa) continue;
         dfs_UtoTar(v, u, tar, path);
-        if(*path.rbegin() != tar) path.pop_back();
+        if(*path.rbegin() != tar) path.pop_back(); // if the current road can go from u to tar, not change
     }
 }
 

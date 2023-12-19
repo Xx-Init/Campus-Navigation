@@ -113,11 +113,11 @@ void Graph:: option(){ // select options and implement the transformation of inp
         print();
         break;
     case 4: 
-        cout<< "Please select the desired compute action.(Enter an option, such as 1)\n";
-        cout<< "1: get the shortest path between two places\n";
-        cout<< "2: get the shortest path through a fixed number of locations\n";
-        cout<< "3: get path from a minimum spanning tree\n";
-        cout<< "4: find topologically constrained shortest paths\n";
+        cout<< "Please select the desired compute action.(Enter an option, such as 1)\n";  
+        cout<< "1: get the shortest path between two places\n"; // task 4
+        cout<< "2: get the shortest path through a fixed number of locations\n"; // task 5
+        cout<< "3: get path from a minimum spanning tree\n"; // task 6
+        cout<< "4: find topologically constrained shortest paths\n"; // task 7
         while(cin>> op3){
             if(op3 < 1 || op3 > 4) cout<< "Unknown action! Please try again!\n";
             else break;
@@ -216,7 +216,7 @@ void Graph:: option(){ // select options and implement the transformation of inp
     }
     cout<< endl;
 }
-
+// task 3
 void Graph:: ins_edge(int u, int v, int w){
     bool found = false;
     for(int i = head[u]; i; i = e1[i].nxt){
@@ -250,7 +250,7 @@ void Graph:: ins_edge(int u, int v, int w){
         head[v] = tot;
     }
 }
-
+// task 3
 void Graph::del_edge(int u, int v){
     if(!head[u] || !head[v]) cout<< "The edge connecting "<< V[u].name<< " and "<< V[v].name<< " does not exist!\n ";
     else{
@@ -270,7 +270,7 @@ void Graph::del_edge(int u, int v){
         }
     }
 }
-
+// task 2
 void Graph:: del_place(int u){
     V[u].existed = false;
     for(int i = head[u]; i; i = e1[i].nxt){
@@ -284,8 +284,8 @@ void Graph:: del_place(int u){
     }
     cout<< "Delete place successfully!\n";
 }
-
-void Graph:: dfs1(int u, int fa){
+// task 1
+void Graph:: dfs1(int u, int fa){ // dfs to traverse all edge
     vis[u] = 1;
     for(int i = head[u]; i; i = e1[i].nxt){
         int v = e1[i].to;
@@ -295,8 +295,8 @@ void Graph:: dfs1(int u, int fa){
         dfs1(v, u);
     }
 }
-
-vector<int> Graph:: getPath(int now){
+// task 4 5 7
+vector<int> Graph:: getPath(int now){  // according to "pre" to get path
     vector<int> path;
     while(pre[now] != -1){
         path.push_back(now);
@@ -305,8 +305,8 @@ vector<int> Graph:: getPath(int now){
     path.push_back(now);
     return path;
 }
-
-void Graph:: dijkstra(int s){
+// task 4
+void Graph:: dijkstra(int s){ // the classical dijkstra algorithm to find single source shortest path
     priority_queue<Node2, vector<Node2>, greater<Node2>> q;
     q.push({0, s});
     while(!q.empty()){
@@ -324,7 +324,7 @@ void Graph:: dijkstra(int s){
         }
     }
 }
-
+// task 4
 void Graph:: getShortestPath(int u, int v){
     pre = new int[nodeSz+1];
     dis = new int[nodeSz+1];
@@ -350,7 +350,7 @@ void Graph:: getShortestPath(int u, int v){
     delete dis;
     delete vis;
 }
-
+// task 1
 void Graph:: print(){   
     printPlaces();
     cout<< "Below is the current road information!\n";
@@ -362,10 +362,10 @@ void Graph:: print(){
     cout<< "Finish!\n";
     delete vis;
 }
-
+// task 5
 void Graph:: dfsToFind(int tar, int now, int fa, int num, int numOfPlaces, int dis, int &ans, vector<int>& path){
     if(num == numOfPlaces){
-        if(dis < ans && now == tar){
+        if(dis < ans && now == tar){ //if n locations are traversed to reach the tar and the distance is shorter
             ans = dis;
             path = getPath(now);
         }
@@ -380,8 +380,8 @@ void Graph:: dfsToFind(int tar, int now, int fa, int num, int numOfPlaces, int d
     }
     vis[now] = 0;
 }
-
-void Graph:: findPathThroNumPlaces(int u, int v, int num){
+// task 5
+void Graph:: findPathThroNumPlaces(int u, int v, int num){ // find shortest path through n locations from u to v
     int ans = inf;
     vector<int> path;
     pre = new int[nodeSz+1];
@@ -389,7 +389,7 @@ void Graph:: findPathThroNumPlaces(int u, int v, int num){
     fill(vis, vis+nodeSz+1, 0);
     fill(pre, pre+nodeSz+1, 0);
     pre[u] = -1;
-    dfsToFind(v, u, 0, 1, num, 0, ans, path);
+    dfsToFind(v, u, 0, 1, num, 0, ans, path); // dfs
     if(path.size()){
         cout<< "The distance of shortest path through "<< num<< " places from "<< V[u].name<< " to "<< V[v].name<< " is "<< ans<< endl;
         cout<< "Below is the shortest path:\n";
@@ -404,7 +404,7 @@ void Graph:: findPathThroNumPlaces(int u, int v, int num){
     delete pre;
     delete vis;
 }
-
+// task 1
 void Graph:: printPlaces(){
     cout<< "Below is the current place information!\n";
     int existCitiesNum = 0;
@@ -413,8 +413,8 @@ void Graph:: printPlaces(){
     if(!existCitiesNum) cout<< "No location information!\n";
     else cout<< "\nThere are "<<existCitiesNum<< " places!"<< endl;
 }
-
-void Graph:: dfs2(int u){
+// task 6
+void Graph:: dfs2(int u){ // simple dfs to determine connectivity
     vis[u] = 1;
     for(int i = head[u]; i; i = e1[i].nxt){
         int v = e1[i].to;
@@ -422,8 +422,8 @@ void Graph:: dfs2(int u){
         dfs2(v);
     }
 }
-
-bool Graph:: inConnectedGraph(vector<int>& placesID){
+// task 6
+bool Graph:: inConnectedGraph(vector<int>& placesID){ 
     vis = new int[nodeSz+1];
     fill(vis, vis+nodeSz+1, 0);
     int root = placesID[0];
@@ -435,21 +435,20 @@ bool Graph:: inConnectedGraph(vector<int>& placesID){
     delete vis;
     return isConnected;
 }
-
+// task 6
 void Graph:: buildMST(vector<int>& places){
     MST T{tot}; 
     queue<int> q;
     set<int> st1, st2;
     vector<int> path;
-    // put the required edge into MTS->e1
-    q.push(places[0]);
-    while(!q.empty()){
-        int u = q.front(); q.pop();
+    q.push(places[0]); // put the required edge into MTS->e1
+    while(!q.empty()){ // using bfs to traverse all edges
+        int u = q.front(); q.pop(); 
         st1.insert(u);
         st2.insert(u);
         for(int i = head[u]; i; i = e1[i].nxt){
             int v = e1[i].to, w = e1[i].dis;
-            if(w == inf) continue;
+            if(w == inf) continue; 
             if(st1.find(v) == st1.end()){
                 T.insert(u, v, w);
                 if(st2.find(v) == st2.end()) q.push(v);
@@ -459,27 +458,24 @@ void Graph:: buildMST(vector<int>& places){
     }
     T.kruskal(); // build MST
     T.flody(); // calculate the shortest circuit of all sources
-    places = T.findOptOrder(places);
-    path = T.getPath(places);
+    places = T.findOptOrder(places); // find the shortest path and get the orders
+    path = T.getPath(places); // according to visiting order to get path 
     cout<< "On the minimum spanning tree, the length of the shortest path through the "<< places.size()<<" desired locations is "<< T.minDis<< endl;
     cout<< "Here is the shortest path:\n"<< V[path[0]].name;
     for(int i = 1; i < path.size(); i ++) cout<< "->"<< V[path[i]].name;
     cout<< endl;
 }
-
-bool Graph:: isAllVisited(vector<int>& placesID){
+// task 7
+bool Graph:: isAllVisited(vector<int>& placesID){  // check whether all fixed places have been visited
     for(auto place: placesID)
         if(!vis[place]) return false;
     return true;
 } 
-
+// task 7
 void Graph:: dfsWithConstraint(int u, int end, int dis, int &ans, vector<int>& path, vector<int>& placesID, unordered_map<int, vector<int> >& constraints){
     vis[u] = 1;
-        /*path = getPath(u);
-        for(auto i: path) cout<< V[i].name<< ' ';
-        cout << endl;*/
     if(u == end){
-        if(isAllVisited(placesID) && dis < ans){
+        if(isAllVisited(placesID) && dis < ans){ // if all places have been visited and the distance is shorter than best so far
             path = getPath(u);
             ans = dis;
         }
@@ -490,7 +486,7 @@ void Graph:: dfsWithConstraint(int u, int end, int dis, int &ans, vector<int>& p
         int to = e1[i].to;
         if(vis[to]) continue;
         bool preHaveVis = true;
-        for(auto j: constraints[to]){  //check if all pre places have been visited
+        for(auto j: constraints[to]){  //check if all pre_places have been visited
             if(!vis[j]){
                 preHaveVis = false;
                 break;
@@ -503,9 +499,9 @@ void Graph:: dfsWithConstraint(int u, int end, int dis, int &ans, vector<int>& p
     vis[u] = 0;
 }
 
-
+// task 7
 void Graph:: findPathWithConstraint(vector<int>& placesID, unordered_map<int, vector<int> >& constraints){
-// placesID: all places need to visit;   constraint: 
+// placesID: all places need to visit;   constraint: constraints on location access order
     int startPlace = placesID[0], endPlace = *placesID.rbegin();
     int ans = inf;
     pre = new int[nodeSz+1];

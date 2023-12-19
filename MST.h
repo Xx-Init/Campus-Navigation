@@ -10,21 +10,21 @@ private:
     set<int> places;
     struct Edge1{
         int u, v, w;
-        bool operator < (const Edge1& o) const{
+        bool operator < (const Edge1& o) const{ // sort the edges to build a minimum spanning tree
             return w < o.w;
         }
     }*e1;
 
     struct Edge2{
         int to, nxt, dis;
-    }*e2;
+    }*e2; // for minimum spanning tree
 
     int ** dis; // store distance
 
     void dfs_UtoTar(int u, int fa,int tar, vector<int>&); // get path from u to tar
 
 public:
-    int minDis;
+    int minDis; // store the shortest distance
 
     MST(int);
 
