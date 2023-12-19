@@ -46,6 +46,10 @@ private:
 
     void dfs2(int); // determine connectivity
 
+    bool isAllVisited(vector<int>&); // determine whether all places have been visited
+
+    void dfsWithConstraint(int, int, int, int&, vector<int>&, vector<int>&, unordered_map<int, vector<int> >&); // dfs to find shortest path through fixed places with constraint
+
 public:
     Graph();
 
@@ -68,6 +72,8 @@ public:
     void printPlaces(); // print current place information
 
     void buildMST(vector<int>&); // build minimum spanning tree
+
+    void findPathWithConstraint(vector<int>&, unordered_map<int, vector<int> >&); // find shortest path through fixed places with constraint
 };
 
 

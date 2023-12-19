@@ -42,6 +42,7 @@ void Graph:: option(){ // select options and implement the transformation of inp
     bool flag;
     string place1, place2;
     vector<int> placesID;
+    unordered_map<int, vector<int> > constraints;
     cout<< "Please select action:\n1 print: output place and road information.\n";
     cout<< "2 insert: insert place/road information.\n";
     cout<< "3 delete: delete place/road information.\n";
@@ -188,8 +189,22 @@ void Graph:: option(){ // select options and implement the transformation of inp
                 cout<< "There are places that cannot be reached (or do not exist)!\n";
                 break;
             }
+            flag = false;
+            constraints.clear();
             cout<< "Please enter the number of constraint!\n";
             cin>> numOfConstraint;
+            cout<< "Please enter the constrains!\n";
+            for(int i = 0; i < numOfConstraint; i ++){
+                cin>> place1>> place2;
+                u = find(V.begin(), V.end(), place1)-V.begin();
+                v = find(V.begin(), V.end(), place2)-V.begin();
+                if(u == V.size() || v == V.size() || find(placesID.begin(), placesID.end(), u) == placesID.end() || find(placesID.begin(), placesID.end(), v) == placesID.end()){
+                    cout<< "There are places that do not exist (or do not in placesID)!\n";
+                    break;
+                }
+                constraints[v].push_back(u);
+            }
+            findPathWithConstraint(placesID, constraints);
             break;
         }
         break;
@@ -450,4 +465,68 @@ void Graph:: buildMST(vector<int>& places){
     cout<< "Here is the shortest path:\n"<< V[path[0]].name;
     for(int i = 1; i < path.size(); i ++) cout<< "->"<< V[path[i]].name;
     cout<< endl;
+}
+
+bool Graph:: isAllVisited(vector<int>& placesID){
+    for(auto place: placesID)
+        if(!vis[place]) return false;
+    return true;
+} 
+
+void Graph:: dfsWithConstraint(int u, int end, int dis, int &ans, vector<int>& path, vector<int>& placesID, unordered_map<int, vector<int> >& constraints){
+    vis[u] = 1;
+        /*path = getPath(u);
+        for(auto i: path) cout<< V[i].name<< ' ';
+        cout << endl;*/
+    if(u == end){
+        if(isAllVisited(placesID) && dis < ans){
+            path = getPath(u);
+            ans = dis;
+        }
+        vis[u] = 0;
+        return;
+    }
+    for(int i = head[u]; i; i = e1[i].nxt){
+        int to = e1[i].to;
+        if(vis[to]) continue;
+        bool preHaveVis = true;
+        for(auto j: constraints[to]){  //check if all pre places have been visited
+            if(!vis[j]){
+                preHaveVis = false;
+                break;
+            }
+        }
+        if(!preHaveVis) continue;
+        pre[to] = u;
+        dfsWithConstraint(to, end, dis+e1[i].dis, ans, path, placesID, constraints);
+    }
+    vis[u] = 0;
+}
+
+
+void Graph:: findPathWithConstraint(vector<int>& placesID, unordered_map<int, vector<int> >& constraints){
+// placesID: all places need to visit;   constraint: 
+    int startPlace = placesID[0], endPlace = *placesID.rbegin();
+    int ans = inf;
+    pre = new int[nodeSz+1];
+    vis = new int[nodeSz+1];
+    fill(vis, vis+nodeSz+1, 0);
+    fill(pre, pre+nodeSz+1, 0);
+    pre[startPlace] = -1;
+    vector<int> path;
+    dfsWithConstraint(startPlace, endPlace, 0, ans, path, placesID, constraints);
+    if(path.size()){
+        cout<< "The distance of shortest path through all fixed places from "<< V[startPlace].name<< " to "<< V[endPlace].name<< " is "<< ans<< endl;
+        cout<< "Below is the shortest path:\n";
+        int sz = path.size();
+        for(int i = sz-1; i > 0; i --){
+            cout<<V[path[i]].name<< "->";
+        }
+        cout<< V[path[0]].name<< endl;
+    }else{
+        cout<< "There is not legal way to visited all fixed places with constaint!\n";
+    }
+
+    delete vis;
+    delete pre;
 }
