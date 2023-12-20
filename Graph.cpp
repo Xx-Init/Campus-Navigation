@@ -513,12 +513,20 @@ void Graph:: findPathWithConstraint(vector<int>& placesID, unordered_map<int, ve
     dfsWithConstraint(startPlace, endPlace, 0, ans, path, placesID, constraints);
     if(path.size()){
         cout<< "The distance of shortest path through all fixed places from "<< V[startPlace].name<< " to "<< V[endPlace].name<< " is "<< ans<< endl;
-        cout<< "Below is the shortest path:\n";
+        cout<< "Below is the shortest path(All the places we passed):\n";
         int sz = path.size();
         for(int i = sz-1; i > 0; i --){
             cout<<V[path[i]].name<< "->";
         }
         cout<< V[path[0]].name<< endl;
+        cout<< "Below is the shortest path(All fixed places):\n";
+        int tmp = 0;
+        for(int i = sz-1; i >= 0; i --){
+            if(find(placesID.begin(), placesID.end(), path[i]) != placesID.end()){
+                if(tmp != placesID.size()-1) cout<<V[path[i]].name<< "->", tmp ++;
+                else{cout<< V[path[i]].name<< endl; break;}
+            }
+        }
     }else{
         cout<< "There is not legal way to visited all fixed places with constaint!\n";
     }
