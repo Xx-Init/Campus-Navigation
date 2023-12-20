@@ -25,9 +25,9 @@ MST:: ~MST(){
     places.clear();
 }
 
-void MST:: insert(int u, int v, int w){ 
-    if(!places.count(u)) numOfPlace ++, places.insert(u);
-    if(!places.count(v)) numOfPlace ++, places.insert(v);
+void MST:: insert(int u, string place1, int v, string place2, int w){ 
+    if(!places.count(u)) numOfPlace ++, places.insert(u), int_to_places[u] = place1;
+    if(!places.count(v)) numOfPlace ++, places.insert(v), int_to_places[v] = place2;
     e1[numOfEdge].u = u;
     e1[numOfEdge].v = v;
     e1[numOfEdge++].w = w;  
@@ -110,4 +110,22 @@ vector<int> MST:: getPath(vector<int>& places){
         dfs_UtoTar(u, 0, v, path);
     }
     return path;
+}
+
+void MST:: dfsMST(int u, int fa){
+    vis[u] = 1;
+    for(int i = head[u]; i; i = e2[i].nxt){
+        int v = e2[i].to;
+        if(vis[v]) continue;
+        cout<< int_to_places[u]<< ' '<< int_to_places[v]<< ' '<< e2[i].dis<< endl;
+        dfsMST(v, u);
+    }   
+}
+void MST:: printMST(){
+    cout<< "[---Begin---] Outputs the minimum spanning tree\n";
+    vis = new int[totNum+1];
+    fill(vis, vis+totNum+2, 0);
+    dfsMST(e1[0].u, 0);
+    cout<< "[---Finish---] Outputs the minimum spanning tree\n";
+
 }

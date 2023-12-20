@@ -435,6 +435,7 @@ bool Graph:: inConnectedGraph(vector<int>& placesID){
     delete vis;
     return isConnected;
 }
+
 // task 6
 void Graph:: buildMST(vector<int>& places){
     MST T{tot}; 
@@ -450,13 +451,14 @@ void Graph:: buildMST(vector<int>& places){
             int v = e1[i].to, w = e1[i].dis;
             if(w == inf) continue; 
             if(st1.find(v) == st1.end()){
-                T.insert(u, v, w);
+                T.insert(u, V[u].name, v, V[v].name, w);
                 if(st2.find(v) == st2.end()) q.push(v);
                 st2.insert(v);
             }
         }
     }
     T.kruskal(); // build MST
+    T.printMST(); // print MST
     T.flody(); // calculate the shortest circuit of all sources
     places = T.findOptOrder(places); // find the shortest path and get the orders
     path = T.getPath(places); // according to visiting order to get path 
