@@ -143,10 +143,10 @@ void Graph:: option(){ // select options and implement the transformation of inp
             u = find(V.begin(), V.end(), place1)-V.begin();
             v = find(V.begin(), V.end(), place2)-V.begin();
             if(u == V.size() || ! V[u].existed){
-                cout<< place1<<" does not existed!\n";
+                cout<< place1<<" does not exist!\n";
                 break;
             }else if(v == V.size() || ! V[v].existed){
-                cout<< place2<<" does not existed!\n";
+                cout<< place2<<" does not exist!\n";
                 break;
             }
             findPathThroNumPlaces(u, v, numOfPlaces);
@@ -424,6 +424,7 @@ void Graph:: dfs2(int u){ // simple dfs to determine connectivity
 }
 // task 6
 bool Graph:: inConnectedGraph(vector<int>& placesID){ 
+    if(!placesID.size()) return false;
     vis = new int[nodeSz+1];
     fill(vis, vis+nodeSz+1, 0);
     int root = placesID[0];
