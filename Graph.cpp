@@ -401,7 +401,7 @@ void Graph:: print(){
     for(int i = 1; i <= nodeSz; i ++)   
         if(!vis[i])
             dfs1(i, 0);
-    cout<< "[---Begin---] Outputs information about roads and locations\n";
+    cout<< "[---Finish---] Outputs information about roads and locations\n";
     delete vis;
 }
 // task 5
@@ -504,7 +504,7 @@ void Graph:: buildMST(vector<int>& places){
     }
     T.kruskal(); // build MST
     T.printMST(); // print MST
-    T.flody(); // calculate the shortest circuit of all sources
+    T.floyd(); // calculate the shortest circuit of all sources
     places = T.findOptOrder(places); // find the shortest path and get the orders
     path = T.getPath(places); // according to visiting order to get path 
     cout<< "[---Begin---] Outputs the shortest path on the minimum spanning tree\n";
