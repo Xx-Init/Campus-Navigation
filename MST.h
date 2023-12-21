@@ -38,7 +38,7 @@ public:
 
     void kruskal(); // using kruskal to build minimum spaning tree
 
-    void flody(); // calculate the shortest circuit of all sources
+    void floyd(); // calculate the shortest circuit of all sources
 
     vector<int> findOptOrder(vector<int>&); // find order of minimum path through all fixed places
 

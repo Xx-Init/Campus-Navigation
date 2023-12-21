@@ -40,7 +40,7 @@ private:
         }
     }; 
 
-    void dfsToFind(int, int, int, int, int, int, int&, vector<int>&);
+    void dfsToFind(int, int, int, int, int, int, int&, vector<int>&); // dfs to find shortest path through n places
 
     bool inConnectedGraph(vector<int>&); // judge whether all places are in a connected graph
 

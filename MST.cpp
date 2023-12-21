@@ -64,7 +64,7 @@ void MST:: kruskal(){
     }
 }
 
-void MST:: flody(){// using flody to calculate the shortest circuit of all sources
+void MST:: floyd(){// using floyd to calculate the shortest circuit of all sources
     for (int k = 1; k <= totNum; k++) {
         for (int i = 1; i <= totNum; i++) {
             for (int j = 1; j <= totNum; j++) {
