@@ -258,6 +258,8 @@ void Graph:: option(){ // select options and implement the transformation of inp
 // task 3
 void Graph:: ins_edge(int u, int v, int w){
     bool found = false;
+    V[u].existed = true;
+    V[v].existed = true;
     for(int i = head[u]; i; i = e1[i].nxt){
         int to = e1[i].to;
         if(to == v){
