@@ -122,10 +122,10 @@ void MST:: dfsMST(int u, int fa){
     }   
 }
 void MST:: printMST(){
-    cout<< "[---Begin---] Outputs the minimum spanning tree\n";
+    cout<< "******************** [---Begin---] Outputs the minimum spanning tree ******************** \n";
     vis = new int[totNum+1];
     fill(vis, vis+totNum+2, 0);
     dfsMST(e1[0].u, 0);
-    cout<< "[---Finish---] Outputs the minimum spanning tree\n";
+    cout<< "******************** [---Finish---] Outputs the minimum spanning tree ******************** \n";
 
 }

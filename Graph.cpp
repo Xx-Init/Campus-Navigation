@@ -52,11 +52,14 @@ void Graph:: option(){ // select options and implement the transformation of inp
     string place1, place2;
     vector<int> placesID;
     unordered_map<int, vector<int> > constraints;
-    cout<< "Please select action:\n1 print: output place and road information.\n";
-    cout<< "2 insert: insert place/road information.\n";
-    cout<< "3 delete: delete place/road information.\n";
-    cout<< "4 compute: compute some information.\n";
-    cout<< "5 exit: log out.\n";
+    cout<< "                            -------------------------------------------\n";
+    cout<< "                           |Please select action:                      |\n";
+    cout<< "                           |1 print: output place and road information.|\n";
+    cout<< "                           |2 insert: insert place/road information.   |\n";
+    cout<< "                           |3 delete: delete place/road information.   |\n";
+    cout<< "                           |4 compute: compute some information.       |\n";
+    cout<< "                           |5 exit: log out.                           |\n";
+    cout<< "                            -------------------------------------------\n";
     cin>> op1;
     switch (options[op1]){
     case 1:
@@ -128,11 +131,13 @@ void Graph:: option(){ // select options and implement the transformation of inp
         print();
         break;
     case 4: 
-        cout<< "Please select the desired compute action.(Enter an option, such as 1)\n";  
-        cout<< "1: get the shortest path between two places\n"; // task 4
-        cout<< "2: get the shortest path through a fixed number of locations\n"; // task 5
-        cout<< "3: get path from a minimum spanning tree\n"; // task 6
-        cout<< "4: find topologically constrained shortest paths\n"; // task 7
+        cout<< "                            ---------------------------------------------------------------------\n";
+        cout<< "                           |Please select the desired compute action.(Enter an option, such as 1)|\n";  
+        cout<< "                           |1: get the shortest path between two places                          |\n"; // task 4
+        cout<< "                           |2: get the shortest path through a fixed number of locations         |\n"; // task 5
+        cout<< "                           |3: get path from a minimum spanning tree                             |\n"; // task 6
+        cout<< "                           |4: find topologically constrained shortest paths                     |\n"; // task 7
+        cout<< "                            ---------------------------------------------------------------------\n";
         while(true) {
             if(cin >> op3){
                 if (op3 < 1 || op3 > 4) 
@@ -379,7 +384,7 @@ void Graph:: getShortestPath(int u, int v){
     if(dis[v] == inf) 
         cout<< "There is no path from "<< V[u].name<< " to "<< V[v].name<< "!\n";
     else{
-        cout<< "[---Begin---] Outputs the shortest path\n";
+        cout<< "******************** [---Begin---] Outputs the shortest path ******************** \n";
         cout<< "The shortest path length is "<< dis[v]<< endl;
         vector<int> path = getPath(v);
         int sz = path.size();
@@ -387,7 +392,7 @@ void Graph:: getShortestPath(int u, int v){
             cout<<V[path[i]].name<< "->";
         }
         cout<< V[path[0]].name<< endl;
-        cout<< "[---Finish---] Outputs the shortest path\n";
+        cout<< "******************** [---Finish---] Outputs the shortest path ******************** \n";
     }
     delete pre;
     delete dis;
@@ -395,7 +400,7 @@ void Graph:: getShortestPath(int u, int v){
 }
 // task 1
 void Graph:: print(){   
-    cout<< "[---Begin---] Outputs information about roads and locations\n";
+    cout<< "******************** [---Begin---] Outputs information about roads and locations ******************** \n";
     printPlaces();
     cout<< "Below is the current road information!\n";
     vis = new int[nodeSz+1];
@@ -403,7 +408,7 @@ void Graph:: print(){
     for(int i = 1; i <= nodeSz; i ++)   
         if(!vis[i])
             dfs1(i, 0);
-    cout<< "[---Finish---] Outputs information about roads and locations\n";
+    cout<< "******************** [---Finish---] Outputs information about roads and locations ******************** \n";
     delete vis;
 }
 // task 5
@@ -435,7 +440,7 @@ void Graph:: findPathThroNumPlaces(int u, int v, int num){ // find shortest path
     pre[u] = -1;
     dfsToFind(v, u, 0, 1, num, 0, ans, path); // dfs
     if(path.size()){
-        cout<< "[---Begin---] Outputs the shortest path through n places\n";
+        cout<< "******************** [---Begin---] Outputs the shortest path through n places ******************** \n";
         cout<< "The distance of shortest path through "<< num<< " places from "<< V[u].name<< " to "<< V[v].name<< " is "<< ans<< endl;
         cout<< "Below is the shortest path:\n";
         int sz = path.size();
@@ -443,7 +448,7 @@ void Graph:: findPathThroNumPlaces(int u, int v, int num){ // find shortest path
             cout<<V[path[i]].name<< "->";
         }
         cout<< V[path[0]].name<< endl;
-        cout<< "[---Finish---] Outputs the shortest path through n places\n";
+        cout<< "******************** [---Finish---] Outputs the shortest path through n places ******************** \n";
     }else{
         cout<< "The shortest path through "<< num<< " places from "<< V[u].name<< " to "<< V[v].name<< " does not exist!\n";
     }
@@ -509,12 +514,12 @@ void Graph:: buildMST(vector<int>& places){
     T.floyd(); // calculate the shortest circuit of all sources
     places = T.findOptOrder(places); // find the shortest path and get the orders
     path = T.getPath(places); // according to visiting order to get path 
-    cout<< "[---Begin---] Outputs the shortest path on the minimum spanning tree\n";
+    cout<< "******************** [---Begin---] Outputs the shortest path on the minimum spanning tree ******************** \n";
     cout<< "On the minimum spanning tree, the length of the shortest path through the "<< places.size()<<" desired locations is "<< T.minDis<< endl;
     cout<< "Here is the shortest path:\n"<< V[path[0]].name;
     for(int i = 1; i < path.size(); i ++) cout<< "->"<< V[path[i]].name;
     cout<< endl;
-    cout<< "[---Finish---] Outputs the shortest path on the minimum spanning tree\n";
+    cout<< "******************** [---Finish---] Outputs the shortest path on the minimum spanning tree ******************** \n";
 }
 // task 7
 bool Graph:: isAllVisited(vector<int>& placesID){  // check whether all fixed places have been visited
@@ -563,7 +568,7 @@ void Graph:: findPathWithConstraint(vector<int>& placesID, unordered_map<int, ve
     vector<int> path;
     dfsWithConstraint(startPlace, endPlace, 0, ans, path, placesID, constraints);
     if(path.size()){
-        cout<< "[---Begin---] Outputs the shortest path through fixed places with constraint\n";
+        cout<< "******************** [---Begin---] Outputs the shortest path through fixed places with constraint ********************\n";
         cout<< "The distance of shortest path through all fixed places from "<< V[startPlace].name<< " to "<< V[endPlace].name<< " is "<< ans<< endl;
         cout<< "Below is the shortest path(All the places we passed):\n";
         int sz = path.size();
@@ -579,7 +584,7 @@ void Graph:: findPathWithConstraint(vector<int>& placesID, unordered_map<int, ve
                 else{cout<< V[path[i]].name<< endl; break;}
             }
         }
-        cout<< "[---Finish---] Outputs the shortest path through fixed places with constraint\n";
+        cout<< "******************** [---Finish---] Outputs the shortest path through fixed places with constraint ********************\n";
     }else{
         cout<< "There is not legal way to visited all fixed places with constaint!\n";
     }
