@@ -123,6 +123,11 @@ void MST:: dfsMST(int u, int fa){
 }
 void MST:: printMST(){
     cout<< "******************** [---Begin---] Outputs the minimum spanning tree ******************** \n";
+    cout<< "There are "<< numOfPlace<< " on the minimum spanning tree\n";
+    for(auto i: int_to_places){
+        cout<< i.second<< ' ';
+    }
+    cout<< endl;
     vis = new int[totNum+1];
     fill(vis, vis+totNum+2, 0);
     dfsMST(e1[0].u, 0);
