@@ -340,6 +340,7 @@ void Graph:: printEdges(int start){ // bfs to traverse all edge
         vis[u] = 1; 
         for (int i = head[u]; i; i = e1[i].nxt) {
             int v = e1[i].to;
+            if(e1[i].dis == inf) continue;
             if (!vis[v]) {
                 cout << V[u].name << ' ' << V[v].name << ' ' << e1[i].dis << endl;
                 if(!st1.count(v)) q.push(v), st1.insert(v);
