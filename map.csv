@@ -1,33 +1,26 @@
-northGate swimmingPool 152
-northwestGate HexiCanteen 96
-northwestGate scienceBuilding 312
-HexiCanteen scienceBuilding 281
-HexiCanteen Statue_of_the_President 318
-HexiCanteen library 323
-HexiCanteen swimmingPool 532
-swimmingPool library 98
-swimmingPool basketballCourt 143
-swimmingPool HedongCanteen 251
-HedongCanteen WenshiLou 85
-Statue_of_the_President scienceBuilding 145
-Statue_of_the_President library 226
-basketballCourt library 112
-basketballCourt WenshiLou 96
-basketballCourt liberalArtsBuilding 346
-basketballCourt gymnasium 412
-WenshiLou gymnasium 348
-WenshiLou eastGate 261
-eastGate gymnasium 187
-gymnasium liberalArtsBuilding 162
-gymnasium WenFuLou 198
-scienceBuilding library 442
-scienceBuilding liberalArtsBuilding 541
-library liberalArtsBuilding 437
-liberalArtsBuilding WenFuLou 47
-
-
-
-
-
-
-
+北门 游泳池 152
+西北门 河西食堂 96
+西北门 理科大楼 312
+河西食堂 理科大楼 281
+河西食堂 毛主席像 318
+河西食堂 图书馆 323
+河西食堂 游泳池 532
+游泳池 图书馆 98
+游泳池 篮球场 143
+游泳池 河东食堂 251
+河东食堂 文史楼 85
+毛泽东像 理科大楼 145
+毛泽东像 图书馆 226
+篮球场 图书馆 112
+篮球场 文史楼 96
+篮球场 文科大楼 346
+篮球场 体育馆 412
+文史楼 体育馆 348
+文史楼 东门 261
+东门 体育馆 187
+体育馆 文科大楼 162
+体育馆 文附楼 198
+理科大楼 图书馆 442
+理科大楼 文科大楼 541
+图书馆 文科大楼 437
+文科大楼 文附楼 47
