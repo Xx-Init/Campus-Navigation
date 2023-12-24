@@ -331,14 +331,20 @@ void Graph:: del_place(int u){
     cout<< "Delete place successfully!\n";
 }
 // task 1
-void Graph:: dfs1(int u, int fa){ // dfs to traverse all edge
-    vis[u] = 1;
-    for(int i = head[u]; i; i = e1[i].nxt){
-        int v = e1[i].to;
-        if(v == fa || vis[v]) continue;
-        if(e1[i].dis == inf) continue;
-        cout<< V[u].name<< ' '<< V[e1[i].to].name<< ' '<< e1[i].dis<< endl;
-        dfs1(v, u);
+void Graph:: printEdges(int start){ // bfs to traverse all edge
+    set<int> st1;
+    queue<int> q;
+    q.push(start); st1.insert(start);
+    while(q.size()){
+        int u = q.front(); q.pop();
+        vis[u] = 1; 
+        for (int i = head[u]; i; i = e1[i].nxt) {
+            int v = e1[i].to;
+            if (!vis[v]) {
+                cout << V[u].name << ' ' << V[v].name << ' ' << e1[i].dis << endl;
+                if(!st1.count(v)) q.push(v), st1.insert(v);
+            }
+        }
     }
 }
 // task 4 5 7
@@ -407,7 +413,7 @@ void Graph:: print(){
     fill(vis, vis+nodeSz+1, 0);
     for(int i = 1; i <= nodeSz; i ++)   
         if(!vis[i])
-            dfs1(i, 0);
+            printEdges(i);
     cout<< "******************** [---Finish---] Outputs information about roads and locations ******************** \n";
     delete vis;
 }
