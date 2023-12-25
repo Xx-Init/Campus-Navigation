@@ -27,7 +27,7 @@ private:
     
     unordered_map<string, int> options;
     
-    void dfs1(int, int); // dfs traverses the graph
+    void printEdges(int); // bfs traverses the graph
 
     void dijkstra(int); // dijkstra algorithm is used to calculate the shortest path
 
