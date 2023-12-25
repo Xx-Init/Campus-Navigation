@@ -123,9 +123,9 @@ void Graph:: option(){ // select options and implement the transformation of inp
             cout<< "Please input place1, place2\n";
             cin>> place1>> place2;
             u = find(V.begin(), V.end(), place1)-V.begin();
-            if(u == V.size()) V.push_back(Node1{place1, true});
+            if(u == V.size()) V.push_back(Node1{place1, false});
             v = find(V.begin(), V.end(), place2)-V.begin();
-            if(v == V.size()) V.push_back(Node1{place2, true});
+            if(v == V.size()) V.push_back(Node1{place2, false});
             del_edge(u, v);
         }
         print();
@@ -298,7 +298,7 @@ void Graph:: ins_edge(int u, int v, int w){
 }
 // task 3
 void Graph::del_edge(int u, int v){
-    if(!head[u] || !head[v]) cout<< "The edge connecting "<< V[u].name<< " and "<< V[v].name<< " does not exist!\n ";
+    if(!head[u] || !head[v] || !V[u].existed || !V[u].existed) cout<< "The edge connecting "<< V[u].name<< " and "<< V[v].name<< " does not exist!\n ";
     else{
         for(int i = head[u]; i ; i = e1[i].nxt){
             int to = e1[i].to;
